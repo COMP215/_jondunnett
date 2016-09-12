@@ -4,7 +4,8 @@
 #include <fstream>
 #include <iostream>
 
-std::vector< std::string > Ptwo(char* filename);
+
+std::vector< std::string > ProgramTwo(char* filename);
 //void place_word(std::string word, std::vector< std::string>& final_array);
 //void shift_array(std::vector< std::string > A, short startpos);
 short whichshorter(short x, short y);
@@ -21,52 +22,52 @@ short whichshorter(short x, short y)
 		return x;
 }
 
-std::vector< std::string > Ptwo(char* infilename)
+std::vector< std::string > ProgramTwo(char* infilename)
 {
 	std::ifstream fin;
 	std::string line;
-	std::vector< std::string > OG_array; 
-	OG_array.resize(1000);
+	std::vector< std::string > og_array;
+	og_array.resize(1000);
 	fin.open(infilename);
 	short i = 0;
 	while (fin) 
 	{
 		std::getline(fin,line);
-		OG_array[i] = line;
+		og_array[i] = line;
 		i++;
 	}
-	OG_array.resize(i);
+	og_array.resize(i);
 
-	for (short i = 0; i < OG_array.size(); i++)
-		std::cout << OG_array[i] << std::endl;
-	organize(OG_array);
+	for (short i = 0; i < og_array.size(); i++)
+		std::cout << og_array[i] << std::endl;
+	organize(og_array);
 
 	fin.close();
-	return OG_array;
+	return og_array;
 
 }
 
 
 void organize(std::vector< std::string >& A)
 {
-	bool notDone = true;
+	bool notdone = true;
 	bool swaps = true;
 	short swapCount = 0;
 	std::string temp = "";
-	while(notDone)
+	while(notdone)
 	{
 		if(swaps)
 		{
 			swaps = 0;
 			for (short i = (A.size() - 1); i > 0; i-- )
 			{
-				if(A[i] < A[i -1])
+				if(A[i-1] < A[i -2])
 				{
 					swapCount++;
-					std::cout << "Swapped: " << A[i] << " and " << A[i-1] << std::endl;
-					temp = A[i-1];
-					A[i-1] = A[i];
-					A[i] = temp;
+					std::cout << "Swapped: " << A[i-1] << " and " << A[i-2] << std::endl;
+					temp = A[i-2];
+					A[i-2] = A[i-1];
+					A[i-1] = temp;
 				}
 			}
 			if (swapCount == 0)
@@ -76,7 +77,7 @@ void organize(std::vector< std::string >& A)
 		}
 		else
 		{
-			notDone = false;
+			notdone = false;
 		}
 	}
 	for (short i = 0; i < A.size(); i++)
