@@ -24,7 +24,7 @@ int main() {
 	infile.close();
 
 	infile.open("words.txt");
-	
+
 
 
 	people_names->InOrder();
