@@ -3,6 +3,7 @@
 #define GRAPH_H
 
 #include <string>
+#include <iostream>
 
 class Node 
 {
@@ -32,6 +33,10 @@ public:
 	bool add_node(std::string);
 	bool add_edge(Node* n1, Node* n2);
 	bool add_edge(std::string, std::string);
+	bool IsBipartite();
+	void print_graph(std::ostream&);
+	//friend std::ostream& operator<<(std::ostream&, graph);
+	//friend std::istream& operator>>(std::istream&, graph&);
 
 };
 
