@@ -41,7 +41,7 @@ edge::edge(Node* x, Node* y, int w)
 
 graph::graph()
 {
-	start_len = 100000;
+	start_len = 100;
 	NA_ = new Node[start_len];
 	hmrNA = 0;
 	EA_ = new edge[start_len];
@@ -60,12 +60,15 @@ bool graph::insert_edge(string name1, string name2)
 {
 	Node* n1 = find_node(name1);
 	Node* n2 = find_node(name2);
+	cout << hmrEA << endl;
 	if (n1 && n2)
 	{
 		edge A = edge(n1,n2);
 		EA_[hmrEA] = A;
 		hmrEA++;
+		return true;
 	}
+	return false;
 }
 
 bool graph::insert_edge(string name1, string name2, int w)
@@ -77,7 +80,9 @@ bool graph::insert_edge(string name1, string name2, int w)
 		edge A = edge(n1,n2,w);
 		EA_[hmrEA] = A;
 		hmrEA++;
+		return true;
 	}
+	return false;
 }
 
 
@@ -118,66 +123,100 @@ void graph::ToGraphviz()
 
 }
 
-Graph KruskalMST()
+graph graph::KruskalMST()
 {
 	graph G;
-	edge* unsorted = this->EA_;
-	edge* sorted = new edge[this->hmrEA];
+	edge* unsorted = &EA_[0];
+	//edge* sorted = new edge[this->hmrEA];
 	int   hmrSorted = 0;
 	int   indexes_done[hmrEA];
 	int   hmr_done = 0;
 	bool  done = false;
 	int   least = 1000;
 
-	for (short i = 0; i < hmrEA; i++)
-	{
-		for (short j=0; j < hmrEA; j++)
-		{
-			if (i == indexes_done[j])
-			{
-				done = true;
-			}
-		}
+	/* Load the nodes into the new graph 
+	for (short i=0; i < hmrNA; i++)
+		G.insert_node(this->NA_[i].name_);
 
-		if (!done)
-		{
-			if(least > (unsorted[i]->weight_))
-			{
-				least = (unsorted[i]->weight_);
-				indexes_done[hmr_done] = i;
-				hmr_done++;
-			}
-		}
+	/* Sort the edges by wieght */
 
-		done = false;
-	}
+	qsort(unsorted, sizeof(unsorted)/sizeof(*unsorted), sizeof(*unsorted), comp);
 
-	for (short i=0; i < hmrEA; i++)
-	{
-		sorted[i] = unsorted[indexes_done[i]];
-	}
-	
 
-	int nodes_in_G[this->hmrNA];
-
+	string left;
+	string right;
 	for (short i = 0; i < hmrEA;i++)
 	{
-		
+		left = (unsorted[i].left_)->name_;
+		right = (unsorted[i].rite_)->name_;
+		if (!(G.find_node(left)) && !(G.find_node(right)))
+		{
+			G.insert_node(left);
+			G.insert_node(right);
+			G.insert_edge(left, right, unsorted[i].weight);
+		}
+		else if (!(G.find_node(left)) && G.find_node(right))
+		{
+			G.insert_node(left);
+			G.insert_edge(left,right, unsorted[i].weight);
+		}
+		else if (G.find_node(left) && !(G.find_node(right)))
+		{
+			G.insert_node(right);
+			G.insert_edge(left, right, unsorted[i].weight);
+		}
+
 	}
-
-
-
-
 
 
 
 	return G;
 }
 
-Graph PrimMST()
+graph graph::PrimMST()
 {
-	Graph G;
+	graph G;
 
 
 	return G;
 } 
+
+bool graph::hasCycle()
+{
+	bool backAti = false;
+	string cur;
+	string check;
+	for(short i=0; i < hmrNA; i++)
+	{
+		check = NA_[i].name_;
+		while(!backAti)
+		{
+			if (cur == check)
+			{
+				backAti = true;
+			}
+		}
+	}
+}
+
+
+int graph::comp (const edge elm1, const edge elm2)
+{
+	if (elm1.weight > elm2.weight)
+	{return  1;}
+	if (elm2.weight > elm1.weight)
+	{return -1;}
+	return 0;
+}
+
+/*
+new algorithm: ( dij_stra's algorithm ) 
+
+- assign total path cost of infinity to each vertex
+- update start vertex cost to 0
+- while open is not empty:
+	- Find vertex with smallest total path cost in open
+	- Look at all edges incident on smallest vertex
+	- move smallest vertex we found from open to closed
+
+*/

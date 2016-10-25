@@ -38,8 +38,10 @@ public:
 	bool insert_edge(std::string,std::string);
 	bool insert_edge(std::string,std::string, int);
 	void ToGraphviz();
-	Graph KruskalMST();
-	Graph PrimMST(); 
+	graph KruskalMST();
+	graph PrimMST(); 
+	bool hasCycle();
+	int  comp(const edge elm1, const edge elm2);
 };
 
 #endif
